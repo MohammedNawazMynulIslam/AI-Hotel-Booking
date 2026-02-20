@@ -1,8 +1,12 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { auth } from "@/auth";
+import Logout from "@/app/(auth)/logout/page";
 
-const Navbar = ({ sidebar }) => {
+const Navbar = async ({ sidebar }) => {
+  const session = await auth();
+
   return (
     <nav>
       <Link href="/">
@@ -32,9 +36,14 @@ const Navbar = ({ sidebar }) => {
           </li>
 
           <li>
-            <Link href="/login" class="login">
-              Login
-            </Link>
+            {session?.user ?
+              <div>
+                <span className="mx-1">{session?.user?.name}</span> | <Logout/>
+              </div>
+            : <Link href="/login" class="login">
+                Login
+              </Link>
+            }
           </li>
         </ul>
       )}
